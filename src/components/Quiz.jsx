@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import QUESTIONS from '../questions.js';
 import QuestionTimer from './QuestionTimer.jsx';
 
@@ -6,6 +6,7 @@ import quizCompleteImg from '../assets/quiz-complete.png';
 
 export default function Quiz() {
 
+    const shuffledAnswers = useRef();
     const [answerState, setAnswerState] = useState('');
 
     // const [actveQuestionIndex, setActiveQuestionIndex] = useState(0);
@@ -49,9 +50,12 @@ export default function Quiz() {
         </div>
     }
 
-    //Added the code here bcz it was trying to access which the quiz was completed and the code exe fails
-    const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-    shuffledAnswers.sort(() => Math.random() - 0.5);
+    if (!shuffledAnswers.current) {
+        //Added the code here bcz it was trying to access which the quiz was completed and the code exe fails
+        shuffledAnswers.current = [...QUESTIONS[activeQuestionIndex].answers];
+        shuffledAnswers.current.sort(() => Math.random() - 0.5);
+    }
+
 
 
     return (
@@ -64,7 +68,7 @@ export default function Quiz() {
                 />
                 <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
                 <ul id='answers'>
-                    {shuffledAnswers.map((answer) => {
+                    {shuffledAnswers.current.map((answer) => {
                         const isSelected = userAnswers[userAnswers.length - 1] === answer;
 
                         let cssClasses = '';
