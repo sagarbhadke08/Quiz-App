@@ -1,12 +1,12 @@
-import { useState, useCallback, useRef } from 'react';
-import QUESTIONS from '../questions.js';
-import QuestionTimer from './QuestionTimer.jsx';
+import { useState, useCallback } from 'react';
 
+import QUESTIONS from '../questions.js';
+import Question from './Question.jsx';
 import quizCompleteImg from '../assets/quiz-complete.png';
 
 export default function Quiz() {
 
-    const shuffledAnswers = useRef();
+
     const [answerState, setAnswerState] = useState('');
 
     // const [actveQuestionIndex, setActiveQuestionIndex] = useState(0);
@@ -33,15 +33,19 @@ export default function Quiz() {
                 } else {
                     setAnswerState('wrong')
                 }
-            }, 1000)
+            }, 1000);
 
             setTimeout(() => {
                 setAnswerState('');
-            }, 2000)
+            }, 2000);
 
-        }, [activeQuestionIndex])// dependency is empty bcz we are not using any state or prop and also not using any value that depeend on prop
+        }, [activeQuestionIndex]
+    );// dependency is empty bcz we are not using any state or prop and also not using any value that depeend on prop
 
-    const handleSkipAnswer = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer]);
+    const handleSkipAnswer = useCallback(
+        () => handleSelectAnswer(null),
+        [handleSelectAnswer]
+    );
 
     if (quizIsComplete) {
         return <div id='summary'>
@@ -50,28 +54,9 @@ export default function Quiz() {
         </div>
     }
 
-    if (!shuffledAnswers.current) {
-        //Added the code here bcz it was trying to access which the quiz was completed and the code exe fails
-        shuffledAnswers.current = [...QUESTIONS[activeQuestionIndex].answers];
-        shuffledAnswers.current.sort(() => Math.random() - 0.5);
-    }
-
-
-
-
-
-
     return (
         <div id="quiz">
-            <div id="questions">
-                <QuestionTimer
-                    key={activeQuestionIndex} // added key to recreate new component for question
-                    timeout={10000}
-                    onTimeout={handleSkipAnswer}
-                />
-                <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
-
-            </div>
+            <Question questionText={}/>
         </div>
     );
 }

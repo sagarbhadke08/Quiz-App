@@ -1,29 +1,46 @@
-export default function Answers() {
+import { useRef } from "react";
+
+export default function Answers({
+    answers,
+    selectedAnswer,
+    answerState,
+    onSelect
+}) {
+
+    const shuffledAnswers = useRef();
+
+    if (!shuffledAnswers.current) {
+        //Added the code here bcz it was trying to access which the quiz was completed and the code exe fails
+        shuffledAnswers.current = [...answers];
+        shuffledAnswers.current.sort(() => Math.random() - 0.5);
+    }
+
     return (
-        <>
-            <ul id='answers'>
-                {shuffledAnswers.current.map((answer) => {
-                    const isSelected = userAnswers[userAnswers.length - 1] === answer;
 
-                    let cssClasses = '';
+        <ul id='answers'>
+            {shuffledAnswers.current.map((answer) => {
+                // const isSelected = userAnswers[userAnswers.length - 1] === answer;
+                const isSelected = selectedAnswer === answer;
 
-                    if (answerState === 'answered' && isSelected) {
-                        cssClasses = 'selected';
-                    }
+                let cssClasses = '';
 
-                    if ((answerState === 'correct' || answerState === 'wrong') && isSelected) {
-                        cssClasses = answerState;
-                    }
+                if (answerState === 'answered' && isSelected) {
+                    cssClasses = 'selected';
+                }
 
-                    return (
-                        <li key={answer} className='answer'>
-                            <button onClick={() => handleSelectAnswer(answer)} className={cssClasses}>
-                                {answer}
-                            </button>
-                        </li>
-                    )
-                })}
-            </ul>
-        </>
+                if ((answerState === 'correct' || answerState === 'wrong') && isSelected) {
+                    cssClasses = answerState;
+                }
+
+                return (
+                    <li key={answer} className='answer'>
+                        <button onClick={() => onSelect(answer)} className={cssClasses}>
+                            {answer}
+                        </button>
+                    </li>
+                )
+            })}
+        </ul>
+
     );
 }
