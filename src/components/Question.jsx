@@ -2,22 +2,30 @@ import QuestionTimer from "./QuestionTimer";
 
 import Answers from "./Answers";
 
-export default function Question({questionText ,answers , onSelectAnswer}) {
+export default function Question({
+    questionText,
+    answers,
+    onSelectAnswer,
+    selectedAnswer,
+    answerState,
+    onSkipAnswer
+}) {
 
     return (
         <div id="question">
             <QuestionTimer
-                key={activeQuestionIndex} // added key to recreate new component for question
+            
                 timeout={10000}
-                onTimeout={handleSkipAnswer}
+                onTimeout={onSkipAnswer}
             />
-            <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
+            <h2>{questionText}</h2>
             <Answers
-                key={activeQuestionIndex}
-                answers={QUESTIONS[activeQuestionIndex].answers}
-                selectedAnswer={userAnswers[userAnswers.length - 1]}
+             
+                answers={answers}
+                selectedAnswer={selectedAnswer}
                 answerState={answerState}
-                onSelect={handleSelectAnswer}
+                onSelect={onSelectAnswer}
+               
             />
         </div>
     );
